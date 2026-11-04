@@ -1,0 +1,17 @@
+{
+  "category": "Subtitles",
+  "changelog": "Rebuilt for Jellyfin 12.4 on Media-Serv (lsheardo-12.4 branch). See https://github.com/GeiserX/whisper-subs/releases",
+  "description": "Automated subtitle generation for Jellyfin using local Whisper AI models.",
+  "guid": "97124bd9-c8cd-4a53-a213-e593aa3fef52",
+  "name": "WhisperSubs",
+  "overview": "Generate subtitles for your media library using local speech-to-text AI (whisper.cpp). Supports CPU and GPU-accelerated transcription. All processing happens locally on your server.",
+  "owner": "GeiserX",
+  "targetAbi": "12.4.0.0",
+  "timestamp": "2026-11-02T21:48:11Z",
+  "version": "4.18.0.0",
+  "status": "Active",
+  "autoUpdate": false,
+  "assemblies": [
+    "WhisperSubs.dll"
+  ]
+}

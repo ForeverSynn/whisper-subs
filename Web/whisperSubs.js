@@ -16,9 +16,20 @@
 
     function checkAdmin() {
         if (isAdmin !== null) return Promise.resolve(isAdmin);
-        return ApiClient.getCurrentUser().then(function (user) {
-            isAdmin = user && user.Policy && user.Policy.IsAdministrator;
-            return isAdmin;
+        // lsheardo: this script loads in <head> before jellyfin-web defines ApiClient; wait for it (max 60 s).
+        return new Promise(function (res) {
+            var n = 0;
+            (function t() {
+                if (typeof ApiClient !== 'undefined' && ApiClient.getCurrentUser) return res(true);
+                if (++n > 240) return res(false);
+                setTimeout(t, 250);
+            })();
+        }).then(function (ok) {
+            if (!ok) return false;
+            return ApiClient.getCurrentUser().then(function (user) {
+                isAdmin = user && user.Policy && user.Policy.IsAdministrator;
+                return isAdmin;
+            });
         }).catch(function () { return false; });
     }
 
@@ -329,7 +340,7 @@
             }
         });
 
-        menuObserver.observe(document.body, { childList: true, subtree: true });
+        (function (o) { var go = function () { o.observe(document.body, { childList: true, subtree: true }); }; if (document.body) go(); else document.addEventListener('DOMContentLoaded', go); })(menuObserver); // lsheardo: script runs in <head> before <body> exists
 
         // Auto-disconnect after 3 seconds
         setTimeout(function () {
@@ -450,7 +461,7 @@
     window.addEventListener('hashchange', scheduleDetailInject);
     window.addEventListener('popstate', scheduleDetailInject);
     var detailObserver = new MutationObserver(scheduleDetailInject);
-    detailObserver.observe(document.body, { childList: true, subtree: true });
+    (function (o) { var go = function () { o.observe(document.body, { childList: true, subtree: true }); }; if (document.body) go(); else document.addEventListener('DOMContentLoaded', go); })(detailObserver); // lsheardo: script runs in <head> before <body> exists
     scheduleDetailInject(); // initial attempt
 
     // Visible (console.log, not console.debug which browsers hide by default) so an admin can confirm

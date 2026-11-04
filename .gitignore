@@ -35,3 +35,6 @@ site/
 .beads/.beads-credential-key
 .beads/.local_version
 .beads/last-touched
+
+# lsheardo build output
+out-12.4/
